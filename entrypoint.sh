@@ -6,4 +6,10 @@ chown -R node:node /data
 chmod -R 755 /data
 
 # Lancer n8n en tant que user node
-exec gosu node n8n start
+export N8N_USER_FOLDER=/data
+export HOME=/data
+export DATA_FOLDER=/data
+
+exec su-exec node n8n start 2>/dev/null || \
+     runuser -u node -- n8n start 2>/dev/null || \
+     n8n start
